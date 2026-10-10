@@ -7,7 +7,8 @@ export default function PriceTicker() {
   const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("https://api.api-store.workers.dev/api/bazardor/products")
+    // fetch("https://api.api-store.workers.dev/api/bazardor/products")
+    fetch("https://api.abcz.workers.dev/api/bazardor/products")
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data) ? data : data.products || [];

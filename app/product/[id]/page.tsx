@@ -82,7 +82,8 @@ function ProductDetailsContent() {
   useEffect(() => {
     if (slug && session) {
       setLoading(true);
-      fetch("https://api.api-store.workers.dev/api/bazardor/products")
+      // fetch("https://api.api-store.workers.dev/api/bazardor/products")
+      fetch("https://api.abcz.workers.dev/api/bazardor/products")
         .then((res) => res.json())
         .then((data) => {
           const productList = Array.isArray(data) ? data : data.products || [];

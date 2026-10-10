@@ -48,7 +48,8 @@ function CategoryContent() {
       setLoading(true);
       console.log("Current Slug from URL:", slug);
 
-      fetch("https://api.api-store.workers.dev/api/bazardor/products")
+      // fetch("https://api.api-store.workers.dev/api/bazardor/products")
+      fetch("https://api.abcz.workers.dev/api/bazardor/products")
         .then((res) => res.json())
         .then((data) => {
           console.log("API Full Data Response:", data); // কনসোলে দেখুন ডেটা আসছে কিনা
