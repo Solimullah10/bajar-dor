@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🛒 Bajar Dor
 
-## Getting Started
+Bajar Dor is a modern, full-stack web application designed to track and compare daily market prices of essential commodities and groceries across various markets and divisions in Bangladesh.
 
-First, run the development server:
+✨ Features
 
-```bash
+Secure Authentication: Complete authentication system built with Better Auth, supporting Email/Password sign-up/sign-in along with social logins (Google & GitHub).
+
+Instant Auto-Login on Registration: Users are automatically logged in and redirected to the home page right after a successful sign-up.
+
+Protected Routes: Product details and price comparison pages are secure; unauthorized users are automatically redirected to the sign-in page.
+
+Real-time Market Prices: View minimum, maximum, and average prices of essential goods categorized neatly (e.g., Rice, Lentils, Oil, Vegetables, Fish, Meat, etc.).
+
+Responsive Dashboard: Clean, modern, and mobile-friendly UI built with Tailwind CSS.
+
+🛠️ Tech Stack
+
+Frontend & Backend: Next.js (App Router)
+
+Styling: Tailwind CSS
+
+Authentication: Better Auth (MongoDB Adapter)
+
+Database: MongoDB
+
+Deployment: Vercel
+
+🚀 Getting Started Locally
+
+Follow these steps to run the project on your local machine:
+
+1. Clone the Repository
+
+git clone https://github.com/Solimullah10/bajar-dor.git
+cd bajar-dor
+
+2. Install Dependencies
+
+npm install
+
+3. Configure Environment Variables
+
+Create a .env file in the root directory and add the following environment variables:
+
+BETTER_AUTH_SECRET=your_better_auth_secret_key
+BETTER_AUTH_URL=http://localhost:3000
+MONGODB_URL=your_mongodb_connection_string
+
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+
+4. Run the Development Server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📂 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+bajar-dor/
+├── app/
+│ ├── api/ # Next.js API Routes & Auth Endpoints
+│ ├── product/ # Protected Product Details Page
+│ ├── signin/ # Sign In Page
+│ ├── signup/ # Sign Up Page
+│ ├── layout.tsx # Root Layout
+│ └── page.tsx # Home Page
+├── lib/
+│ ├── auth.ts # Server-side Better Auth configuration
+│ └── auth-client.ts# Client-side Better Auth hooks
+├── public/ # Static assets and images
+└── .env # Environment variables
 
-## Learn More
+🌐 Deployment (Vercel)
 
-To learn more about Next.js, take a look at the following resources:
+Push your code to your GitHub repository.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Import the project into Vercel.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Add all production Environment Variables (BETTER_AUTH_SECRET, BETTER_AUTH_URL, MONGODB_URL, OAuth keys, etc.) in the Vercel Project Settings. (Note: Set BETTER_AUTH_URL to your Vercel live domain).
 
-## Deploy on Vercel
+Deploy!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Github Link: https://github.com/Solimullah10/bajar-dor.git
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Live Server Link: https://bajar-dor-ten.vercel.app
