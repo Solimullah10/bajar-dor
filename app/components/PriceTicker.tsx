@@ -11,6 +11,7 @@ export default function PriceTicker() {
     fetch("https://api.abcz.workers.dev/api/bazardor/products")
       .then((res) => res.json())
       .then((data) => {
+        // console.log(data);
         const list = Array.isArray(data) ? data : data.products || [];
         setProducts(list);
       })

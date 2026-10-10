@@ -26,7 +26,7 @@ export default function SignUpPage() {
         onSuccess: (ctx) => {
           console.log("Registered User Data:", ctx.data);
           toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
-          router.push("/signin");
+          router.push("/");
         },
         onError: (ctx) => {
           console.log("Registration Error:", ctx.error);

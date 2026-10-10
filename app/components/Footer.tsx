@@ -18,7 +18,9 @@ export default function Footer() {
           <Link href="/">
             <div className="space-y-4 md:col-span-1">
               <div className="flex items-center space-x-2">
-                <span className="text-2xl">🛒</span>
+                <span className="text-2xl  bg-green-500 p-2 rounded-2xl">
+                  🛒
+                </span>
                 <span className="text-xl font-bold text-gray-900 tracking-tight">
                   বাজার দর
                 </span>
