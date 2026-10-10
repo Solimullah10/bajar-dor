@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Product {
   id: number;
@@ -88,8 +89,13 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-8 flex items-center justify-center w-full md:w-auto text-7xl">
-          🧺
+        <div className="flex items-center justify-center w-full md:w-auto text-7xl">
+          <Image
+            src="/bazar-hero.png"
+            alt="Bazar Hero"
+            width={400}
+            height={400}
+          />
         </div>
       </section>
 
