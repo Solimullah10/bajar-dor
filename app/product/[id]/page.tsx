@@ -30,6 +30,7 @@ interface Product {
 import { useEffect, useState, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { authClient } from "../../lib/auth-client";
 
 export default function ProductDetailsPage() {
   return (
@@ -50,11 +51,36 @@ function ProductDetailsContent() {
   const slug = params?.id;
   const router = useRouter();
 
+  // সেশন চেক করা
+  const { data: session, isPending: isSessionPending } =
+    authClient.useSession();
+
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<Product | null>(null);
 
+  // লগইন করা না থাকলে সরাসরি সাইন-ইন পেজে রিডাইরেক্ট করা
   useEffect(() => {
-    if (slug) {
+    if (!isSessionPending && !session) {
+      router.replace("/signin");
+    }
+  }, [session, isSessionPending, router]);
+
+  // সেশন লোড হওয়ার সময় লোডিং স্ক্রিন দেখানো
+  if (isSessionPending) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500 font-medium">
+        যাচাই করা হচ্ছে...
+      </div>
+    );
+  }
+
+  // যদি সেশন বা লগইন করা না থাকে, তবে কোনো কন্টেন্ট রেন্ডার করবে না
+  if (!session) {
+    return null;
+  }
+
+  useEffect(() => {
+    if (slug && session) {
       setLoading(true);
       fetch("https://api.api-store.workers.dev/api/bazardor/products")
         .then((res) => res.json())
@@ -69,7 +95,7 @@ function ProductDetailsContent() {
           setLoading(false);
         });
     }
-  }, [slug]);
+  }, [slug, session]);
 
   if (loading) {
     return (
@@ -82,12 +108,11 @@ function ProductDetailsContent() {
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-500 font-medium">
-        পণ্যটি পাওয়া যায়নি।
+        পণ্যটি পাওয়া যায়নি।
       </div>
     );
   }
 
-  // বাজারের ডেটা থেকে সর্বনিম্ন, সর্বাধিক ও গড় হিসাব করা
   const markets = product.markets || [];
   const minPrices = markets.map((m) => m.min);
   const maxPrices = markets.map((m) => m.max);
@@ -103,7 +128,6 @@ function ProductDetailsContent() {
       ? Math.round(avgPrices.reduce((a, b) => a + b, 0) / avgPrices.length)
       : product.today;
 
-  // দাম পরিবর্তনের টেক্সট নির্ধারণ
   const diff = product.today - product.yesterday;
   const isUp = product.change?.dir === "up";
   const isDown = product.change?.dir === "down";
@@ -111,7 +135,7 @@ function ProductDetailsContent() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 space-y-6">
       <div className="max-w-5xl mx-auto space-y-6">
-        {/* ব্রেডক্রাম্ব (Breadcrumb Navigation) */}
+        {/* Breadcrumb Navigation */}
         <nav className="text-sm text-gray-500 flex items-center space-x-2">
           <Link href="/" className="hover:text-green-600 transition">
             হোম
@@ -124,7 +148,7 @@ function ProductDetailsContent() {
           <span className="text-gray-900 font-medium">{product.nameBn}</span>
         </nav>
 
-        {/* টপ প্রোডাক্ট হেডার কার্ড (আরেকটি কার্ড যাতে ছবি/ইমোজি ও আজকের দাম আছে) */}
+        {/* Top Product Header Card */}
         <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center space-x-4">
             <div className="text-5xl sm:text-6xl bg-gray-50 border border-gray-100 p-4 rounded-2xl flex items-center justify-center shadow-inner">
@@ -139,7 +163,7 @@ function ProductDetailsContent() {
                 {product.categoryNameBn || product.category}
               </p>
               <p className="text-xs text-gray-400 mt-2">
-                গতকালের তুলনায় আজ দাম{" "}
+                গতকালের তুলনায় আজ দাম{" "}
                 <span
                   className={
                     isUp
@@ -150,10 +174,10 @@ function ProductDetailsContent() {
                   }
                 >
                   {diff > 0
-                    ? `বেড়েছে ${diff} টাকা`
+                    ? `বেড়েছে ${diff} টাকা`
                     : diff < 0
                       ? `কমেছে ${Math.abs(diff)} টাকা`
-                      : "অপরিবর্তিত রয়েছে"}
+                      : "অপরিবর্তিত রয়েছে"}
                 </span>
               </p>
             </div>
@@ -178,7 +202,7 @@ function ProductDetailsContent() {
           </div>
         </div>
 
-        {/* দামের সারসংক্ষেপ (Summary Cards) */}
+        {/* Summary Cards */}
         <div className="space-y-3">
           <h2 className="text-lg font-bold text-gray-900">দামের সারসংক্ষেপ</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -189,9 +213,6 @@ function ProductDetailsContent() {
               <span className="text-2xl font-bold text-emerald-600">
                 ৳{overallMin} টাকা
               </span>
-              <span className="text-[11px] text-gray-500 block mt-1">
-                সবচেয়ে কম দামের বাজার
-              </span>
             </div>
 
             <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
@@ -201,9 +222,6 @@ function ProductDetailsContent() {
               <span className="text-2xl font-bold text-red-600">
                 ৳{overallMax} টাকা
               </span>
-              <span className="text-[11px] text-gray-500 block mt-1">
-                সবচেয়ে বেশি দামের বাজার
-              </span>
             </div>
 
             <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
@@ -211,19 +229,15 @@ function ProductDetailsContent() {
               <span className="text-2xl font-bold text-emerald-600">
                 ৳{overallAvg} টাকা
               </span>
-              <span className="text-[11px] text-gray-500 block mt-1">
-                প্রতি {product.unit}-এর হিসাবে
-              </span>
             </div>
           </div>
         </div>
 
-        {/* বাজারভিত্তিক আজকের দাম (Table Layout) */}
+        {/* Market Price Table */}
         <div className="space-y-3">
           <h2 className="text-lg font-bold text-gray-900">
             বাজারভিত্তিক আজকের দাম
           </h2>
-
           <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-right border-collapse">
@@ -241,7 +255,9 @@ function ProductDetailsContent() {
                     <th className="py-3.5 px-6 text-right font-semibold">
                       সর্বাধিক
                     </th>
-                    <th className="py-3.5 px-6 text-right font-semibold">গড়</th>
+                    <th className="py-3.5 px-6 text-right font-semibold">
+                      গড়
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
