@@ -26,7 +26,8 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch("https://api.api-store.workers.dev/api/bazardor/products")
+    // fetch("https://api.api-store.workers.dev/api/bazardor/products");
+    fetch("https://api.abcz.workers.dev/api/bazardor/products")
       .then((res) => res.json())
       .then((data) => {
         // এপিআই যেহেতু সরাসরি অ্যারে দিচ্ছে, তাই সরাসরি ডাটা সেট হবে
